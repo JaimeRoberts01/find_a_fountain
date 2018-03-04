@@ -16,22 +16,15 @@ from findafountain.models import UserProfile
 
 class UserForm(forms.ModelForm):
 	password = forms.CharField(label='', widget=forms.PasswordInput(attrs={'size':40, 'placeholder':'Password'}))
-
+	username = forms.CharField(label='', widget=forms.TextInput(attrs={'help_text':None,'size':40, 'placeholder':'Username'}))
 	class Meta:
 		model = User
-		fields =('username', 'email')
-		help_texts = {
-            'username': gettext('Some useful help text.'),
-
-        }
-        def fields_for_model(help_texts=None)
-		#labels={'username':'', 'email':'',}
+		fields =('username', 'email',)
+		labels={'email':'',}
 		widgets ={
-			'username': forms.TextInput(attrs={'size':40, 'placeholder':'Username'}),
+			#'username': forms.TextInput(attrs={'help_text':None, 'size':40, 'placeholder':'Username'}),
 			'email': forms.TextInput(attrs={'size':40,'placeholder':'Email'}),
 		}
-		help_text=None
-
 
 class UserProfileForm(forms.ModelForm):
 	class Meta:

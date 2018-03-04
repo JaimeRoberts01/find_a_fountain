@@ -5,10 +5,23 @@ from findafountain.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse 
+from findafountain.models import Fountain
 
 def index(request):
-	return render(request, 'findafountain/index.html')
+	fountain_list = Fountain.objects.order_by('name').distinct()
+	floor_list = Fountain.objects.order_by('floor').distinct()
+	context_dict = {'fountains': fountain_list, 'floors': floor_list}
+	return render(request, 'findafountain/index.html', context_dict)
+
+def get_fountain(request, fountain_id_slug):
+	context_dict = {}
+	try: 
+		fountain = Fountain.objects.get(id=fountain_id_slug)
+		context_dict['fountain'] = fountain
+	except Fountain.DoesNotExist: 
+		context_dict['fountain'] = None
+	return render(request, 'findafountain/fountain.html', context_dict)
 
 def about(request):
 	return render(request, 'findafountain/about.html')
@@ -18,10 +31,6 @@ def page_not_found(request):
 
 def contact(request):
 	return render(request, 'findafountain/contact.html')
-
-def search(request):
-	return render(request, 'findafountain/search.html')
-
 
 def submit(request):
 	return render(request, 'findafountain/submit.html')
@@ -75,3 +84,4 @@ def user_login(request):
 def user_logout(request):
 	logout(request)
 	return HttpResponseRedirect(reverse('index'))
+
